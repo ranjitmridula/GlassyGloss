@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GlassyGloss • Ultra-Shine Lip Gloss Landing Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Poppins"', "system-ui", "sans-serif"],
+              body: ['"Inter"', "system-ui", "sans-serif"],
+            },
+            colors: {
+              brand: {
+                light: "#ffe4f4",
+                DEFAULT: "#fb6fbb",
+                dark: "#d946a2",
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Cute fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-pink-50 text-pink-950 font-body">
+    <div id="root" class="min-h-screen"></div>
+
+    <!-- React + ReactDOM + Babel -->
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      const navItems = [
+        { id: "hero", label: "Home" },
+        { id: "integrations", label: "Integrations" },
+        { id: "features", label: "Features" },
+        { id: "bestseller", label: "Bestseller" },
+        { id: "gallery", label: "Gallery" },
+        { id: "reviews", label: "Reviews" },
+        { id: "faqs", label: "FAQs" },
+        { id: "contact", label: "Contact" },
+      ];
+
+      const scrollToSection = (id) => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+
+      function LeftNav({ active, onNavClick, cartCount }) {
+        return (
+          <nav className="hidden lg:flex lg:flex-col lg:fixed lg:inset-y-0 lg:w-64 bg-pink-100/80 backdrop-blur border-r border-pink-200/80 px-6 py-8">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-brand via-pink-400 to-fuchsia-500 shadow-lg flex items-center justify-center text-white font-display text-xl">
+                G
+              </div>
+              <div>
+                <p className="font-display font-semibold text-pink-900 leading-tight">
+                  GlassyGloss
+                </p>
+                <p className="text-xs text-pink-500">
+                  Sugar-glazed lip shine
+                </p>
+              </div>
+            </div>
+
+            <button
+              className="mb-5 inline-flex items-center justify-between w-full px-3 py-2 rounded-xl text-xs font-medium bg-white/80 border border-pink-200 text-pink-800 shadow-sm"
+              onClick={() => scrollToSection("bestseller")}
+            >
+              <span>Cart</span>
+              <span className="inline-flex items-center gap-1">
+                <span className="w-5 h-5 rounded-full bg-gradient-to-br from-brand to-pink-400 flex items-center justify-center text-[11px] text-white font-semibold">
+                  {cartCount}
+                </span>
+                items
+              </span>
+            </button>
+
+            <ul className="space-y-1 flex-1">
+              {navItems.map((item) => (
+                <li key={item.id}>
+                  <button
+                    onClick={() => onNavClick(item.id)}
+                    className={
+                      "w-full text-left px-3 py-2 rounded-xl text-sm flex items-center justify-between transition-all " +
+                      (active === item.id
+                        ? "bg-gradient-to-r from-brand to-pink-400 text-white shadow-pink-200 shadow-md"
+                        : "text-pink-700 hover:bg-pink-200/70 hover:text-pink-900")
+                    }
+                  >
+                    <span>{item.label}</span>
+                    {active === item.id && (
+                      <span className="text-xs">♥</span>
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-4 text-xs text-pink-500">
+              <p className="font-medium text-pink-700 mb-1">Limited drop</p>
+              <p>Free shipping over ₹666 • Vegan • Cruelty free</p>
+            </div>
+          </nav>
+        );
+      }
+
+      function MobileNav({ active, onNavClick, cartCount }) {
+        const [open, setOpen] = useState(false);
+
+        return (
+          <header className="lg:hidden sticky top-0 z-40 bg-pink-50/95 backdrop-blur border-b border-pink-100">
+            <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-2xl bg-gradient-to-br from-brand via-pink-400 to-fuchsia-500 shadow flex items-center justify-center text-white font-display text-lg">
+                  G
+                </div>
+                <span className="font-display font-semibold text-pink-900 text-sm">
+                  GlassyGloss
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => scrollToSection("bestseller")}
+                  className="px-3 py-1 rounded-full border border-pink-200 text-[11px] text-pink-700 bg-white/80"
+                >
+                  Cart {cartCount > 0 ? `(${cartCount})` : ""}
+                </button>
+                <button
+                  onClick={() => setOpen(!open)}
+                  className="p-2 rounded-xl border border-pink-200 text-pink-700 text-xs font-medium"
+                >
+                  {open ? "Close" : "Menu"}
+                </button>
+              </div>
+            </div>
+
+            {open && (
+              <div className="px-4 pb-3 space-y-1 bg-pink-50/95">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      onNavClick(item.id);
+                      setOpen(false);
+                    }}
+                    className={
+                      "w-full text-left px-3 py-2 rounded-xl text-sm " +
+                      (active === item.id
+                        ? "bg-gradient-to-r from-brand to-pink-400 text-white shadow"
+                        : "text-pink-700 bg-pink-100")
+                    }
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </header>
+        );
+      }
+
+      function Hero({ onAddToCart }) {
+        return (
+          <section
+            id="hero"
+            className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-pink-50 via-pink-200 to-fuchsia-200 border border-pink-100 shadow-[0_20px_80px_rgba(219,39,119,0.15)] px-6 sm:px-10 py-12 sm:py-16"
+          >
+            <div className="absolute -right-32 -top-32 w-72 h-72 bg-pink-300/40 blur-3xl rounded-full pointer-events-none" />
+            <div className="absolute -left-16 bottom-0 w-56 h-56 bg-fuchsia-300/40 blur-3xl rounded-full pointer-events-none" />
+
+            <div className="relative grid lg:grid-cols-2 gap-10 items-center">
+              {/* Left: Copy */}
+              <div>
+                <span className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full bg-white/70 border border-pink-100 text-pink-600 mb-3">
+                  ✨ New • Strawberry Milkshine Collection
+                </span>
+                <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-pink-950 leading-tight mb-4">
+                  Glassy, glossy,
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-brand via-pink-500 to-fuchsia-500">
+                    sugar-sweet lips.
+                  </span>
+                </h1>
+                <p className="text-pink-800/90 text-sm sm:text-base max-w-xl mb-6">
+                  Meet <span className="font-semibold">GlassyGloss</span>, the
+                  ultra-hydrating lip gloss that looks like glass and feels like
+                  a cloud. Zero stickiness, all shine. One swipe and you&apos;re
+                  selfie‑ready.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-3 mb-5">
+                  <button
+                    className="inline-flex items-center justify-center px-5 py-3 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-brand via-pink-500 to-fuchsia-500 shadow-lg shadow-pink-300 hover:scale-[1.02] active:scale-95 transition-transform"
+                    onClick={() => onAddToCart && onAddToCart()}
+                  >
+                    Add to cart
+                  </button>
+                  <button
+                    className="inline-flex items-center justify-center px-5 py-3 rounded-full text-sm font-medium text-pink-800 bg-white/80 border border-pink-200 hover:bg-pink-50"
+                    onClick={() => scrollToSection("bestseller")}
+                  >
+                    Go to shop
+                  </button>
+                  <button
+                    className="inline-flex items-center justify-center px-4 py-2 rounded-full text-xs font-medium text-pink-700 bg-pink-100/80 border border-pink-200 hover:bg-pink-100"
+                    onClick={() => scrollToSection("features")}
+                  >
+                    View all shades
+                  </button>
+                </div>
+
+                <dl className="flex flex-wrap gap-x-8 gap-y-3 text-xs sm:text-sm text-pink-800/90">
+                  <div>
+                    <dt className="font-semibold text-pink-900">12+ hours</dt>
+                    <dd className="text-pink-700">Cushiony moisture</dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-pink-900">0%</dt>
+                    <dd className="text-pink-700">
+                      Stickiness or clumping
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-pink-900">100K+</dt>
+                    <dd className="text-pink-700">Happy glossy babes</dd>
+                  </div>
+                </dl>
+              </div>
+
+              {/* Right: Media */}
+              <div className="relative">
+                <div className="absolute -inset-4 bg-gradient-to-br from-pink-100 via-pink-200 to-fuchsia-200 rounded-[2.25rem] opacity-80 blur-xl" />
+                <div className="relative rounded-[2rem] bg-white/80 border border-pink-100 shadow-[0_18px_70px_rgba(219,39,119,0.25)] p-3 sm:p-4">
+                  {/* Main image */}
+                  <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-pink-100 flex items-center justify-center mb-3">
+                    <img
+                      src="./image1.png"
+                      alt="GlassyGloss tubes arranged aesthetically"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="aspect-video rounded-2xl overflow-hidden bg-pink-100 flex items-center justify-center">
+                      <video
+                        className="w-full h-full object-cover"
+                        src="./video1.mp4"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                      />
+                    </div>
+                    <div className="aspect-video rounded-2xl overflow-hidden bg-pink-100 flex items-center justify-center">
+                      <img
+                        src="./image2.png"
+                        alt="Close-up of glossy lips wearing GlassyGloss"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  <p className="mt-3 text-[11px] text-pink-600 flex items-center justify-between">
+                    <span>Vegan • Cruelty free • Dermatologist tested</span>
+                    <span className="inline-flex items-center gap-1">
+                      ★ 4.9
+                      <span className="text-pink-400">·</span>
+                      2,418 reviews
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      function Integrations() {
+        const items = [
+          {
+            title: "Influencer-ready",
+            body: "Pairs perfectly with Instagram Reels — zero flashback, camera-friendly shine, and flattering in every lighting.",
+            tag: "Content creators",
+          },
+          {
+            title: "Day & night routine",
+            body: "Layer over lip liner, matte lipstick, or naked lips without pilling. Plays nice with skincare and SPF.",
+            tag: "Beauty routine",
+          },
+          {
+            title: "Bag-friendly design",
+            body: "Leak-proof tube with soft doe-foot applicator that hugs your Cupid’s bow for a precise, juicy finish.",
+            tag: "On-the-go",
+          },
+          {
+            title: "Skin-first formula",
+            body: "Packed with hyaluronic acid, shea butter, honey and vitamin E to cushion and repair while you glow.",
+            tag: "Skin-loving",
+          },
+        ];
+
+        return (
+          <section id="integrations" className="mt-12">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="font-display text-xl sm:text-2xl text-pink-950 mb-1">
+                  Integrates with your glow life
+                </h2>
+                <p className="text-sm text-pink-700 max-w-xl">
+                  From morning coffee runs to midnight selfies, GlassyGloss
+                  slips into every part of your routine.
+                </p>
+              </div>
+              <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-[11px] font-medium bg-pink-100 text-pink-700 border border-pink-200">
+                ☁️ Cloud-soft formula
+              </span>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {items.map((card) => (
+                <div
+                  key={card.title}
+                  className="rounded-2xl border border-pink-100 bg-white/80 p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                >
+                  <p className="inline-flex items-center px-2 py-1 mb-2 rounded-full text-[10px] font-semibold bg-pink-100 text-pink-700 uppercase tracking-wide">
+                    {card.tag}
+                  </p>
+                  <h3 className="font-semibold text-pink-900 mb-1 text-sm">
+                    {card.title}
+                  </h3>
+                  <p className="text-xs text-pink-700 leading-relaxed">
+                    {card.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      }
+
+      function Features() {
+        const features = [
+          {
+            title: "Pillow-soft feel",
+            desc: "Gel-oil hybrid texture that melts into lips. No tugging, no heavy waxy layer, just cushiony comfort.",
+            highlight: "Cloud texture",
+          },
+          {
+            title: "Glass-level shine",
+            desc: "Micro-reflective pearls catch light from every angle for a 3D, wet-look sheen in a single swipe.",
+            highlight: "3D shine",
+          },
+          {
+            title: "Built-in care",
+            desc: "Hyaluronic acid, jojoba oil, honey and shea butter drench lips in moisture while smoothing fine lines.",
+            highlight: "Lip care",
+          },
+          {
+            title: "Candy-inspired scents",
+            desc: "Strawberry Milk, Cotton Candy Crush, Peach Fizz,  Cake Dream — sweet but never overpowering.",
+            highlight: "Soft scents",
+          },
+          {
+            title: "Shade-flex formula",
+            desc: "Sheer tints that flatter every undertone and layer beautifully over liners and lipsticks.",
+            highlight: "Universal tints",
+          },
+          {
+            title: "Clean & kind",
+            desc: "Vegan, cruelty free, and formulated without parabens, mineral oil, or phthalates.",
+            highlight: "Conscious",
+          },
+          {
+            title: "No mirror needed",
+            desc: "Soft sheer coverage that forgives tiny mistakes and fades evenly — perfect for on-the-go touchups.",
+            highlight: "Easy swipe",
+          },
+          {
+            title: "Desk-to-date ready",
+            desc: "One tube takes you from Zoom calls to late-night dessert runs without drying out your lips.",
+            highlight: "All-day glam",
+          },
+        ];
+
+        return (
+          <section id="features" className="mt-12">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-display text-xl sm:text-2xl text-pink-950">
+                Features that make lips fall in love
+              </h2>
+              <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-[11px] font-medium bg-gradient-to-r from-brand to-pink-400 text-white shadow-sm">
+                💖 Zero stickiness guaranteed
+              </span>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              {features.map((feat) => (
+                <div
+                  key={feat.title}
+                  className="group rounded-2xl bg-white/80 border border-pink-100 p-4 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all"
+                >
+                  <div className="inline-flex px-2 py-1 rounded-full text-[10px] font-medium bg-pink-100 text-pink-700 mb-2">
+                    {feat.highlight}
+                  </div>
+                  <h3 className="font-semibold text-pink-900 mb-1 text-sm group-hover:text-brand">
+                    {feat.title}
+                  </h3>
+                  <p className="text-xs text-pink-700 leading-relaxed">
+                    {feat.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      }
+
+      function Bestseller({ onAddToCart }) {
+        return (
+          <section id="bestseller" className="mt-12">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="font-display text-xl sm:text-2xl text-pink-950 mb-1">
+                  Our bestseller: Strawberry Milkshine
+                </h2>
+                <p className="text-sm text-pink-700">
+                  The most-loved shade in the GlassyGloss family — sweet, soft
+                  pink that flatters every skin tone.
+                </p>
+              </div>
+              <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-[11px] font-medium bg-pink-100 text-pink-700 border border-pink-200">
+                🏆 #1 most bought
+              </span>
+            </div>
+
+            <div className="grid md:grid-cols-[1.2fr,1fr] gap-5 rounded-3xl bg-white/80 border border-pink-100 p-4 sm:p-6 shadow-[0_14px_50px_rgba(219,39,119,0.15)]">
+              <div className="rounded-2xl overflow-hidden bg-pink-100">
+                <img
+                  src="./image2.png"
+                  alt="Bestselling Strawberry Milkshine gloss on glossy lips"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col justify-between gap-3 text-sm">
+                <div>
+                  <p className="inline-flex px-3 py-1 rounded-full text-[11px] font-semibold bg-pink-100 text-pink-700 mb-2">
+                    Bestseller • Most repurchased
+                  </p>
+                  <h3 className="font-semibold text-pink-900 text-base mb-2">
+                    Strawberry Milkshine Glassy Gloss
+                  </h3>
+                  <p className="text-xs text-pink-700 mb-3">
+                    Milky strawberry pink with a sheer, juicy tint and glassy
+                    shine. Perfect alone or over nude and pink lip liners.
+                  </p>
+                  <p className="text-sm font-semibold text-pink-900">
+                    ₹444.00
+                    <span className="ml-2 text-xs font-normal text-pink-500 line-through">
+                      ₹555.00
+                    </span>
+                    <span className="ml-2 text-xs font-medium text-pink-700 bg-pink-100 px-2 py-0.5 rounded-full">
+                      Limited launch offer
+                    </span>
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    className="inline-flex items-center justify-center px-4 py-2.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-brand via-pink-500 to-fuchsia-500 shadow-md hover:scale-[1.02] active:scale-95 transition-transform"
+                    onClick={() => onAddToCart && onAddToCart()}
+                  >
+                    Add to cart
+                  </button>
+                  <button
+                    className="inline-flex items-center justify-center px-4 py-2.5 rounded-full text-xs font-medium text-pink-800 bg-pink-50 border border-pink-200 hover:bg-pink-100"
+                    onClick={() => scrollToSection("features")}
+                  >
+                    See all shades
+                  </button>
+                  <button
+                    className="inline-flex items-center justify-center px-4 py-2.5 rounded-full text-[11px] font-medium text-pink-700 bg-white border border-pink-200 hover:bg-pink-50"
+                    onClick={() => scrollToSection("reviews")}
+                  >
+                    Read reviews
+                  </button>
+                </div>
+
+                <p className="text-[11px] text-pink-600">
+                  ★ 4.9 · Most bought shade this month · 1,200+ repeat orders
+                </p>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      function Gallery() {
+        return (
+          <section id="gallery" className="mt-12">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-display text-xl sm:text-2xl text-pink-950">
+                Swipe-worthy close-ups
+              </h2>
+              <p className="hidden sm:block text-xs text-pink-700">
+                These sections use AI-generated images & video.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              {/* Big flatlay image */}
+              <div className="md:col-span-2 rounded-3xl overflow-hidden bg-pink-100 border border-pink-100 shadow-sm">
+                <img
+                  src="./image3.png"
+                  alt="Flatlay of GlassyGloss collection in all shades"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Video + tip card */}
+              <div className="space-y-4">
+                <div className="rounded-2xl overflow-hidden bg-pink-100 border border-pink-100 aspect-video">
+                  <video
+                    src="./video1.mp4"
+                    className="w-full h-full object-cover"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls={false}
+                  ></video>
+                </div>
+
+                <div className="rounded-2xl bg-pink-100/70 border border-pink-100 px-4 py-3 text-xs text-pink-800">
+                  <h3 className="font-semibold text-sm text-pink-900 mb-1">
+                    Tip of the day ✨
+                  </h3>
+                  <p>
+                    Keep a gloss in every bag: one for your tote, one for your
+                    desk, and one for your going-out mini. Future-you will
+                    thank you every time you catch your reflection.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      function Reviews() {
+        const reviews = [
+          {
+            name: "Robin S.",
+            email: "robin.glossy@example.com",
+            title: "My lips have never looked this juicy",
+            body: "I’ve tried so many glosses but this is the only one that’s glassy without being sticky. I wear Strawberry Milkshine literally every hor and get compliments constantly.",
+            rating: 5,
+          },
+          {
+            name: "Lily A.",
+            email: "lily.sparkle@example.com",
+            title: "Comfort gloss girlie approved",
+            body: "I have super sensitive lips and this doesn’t irritate them at all. It feels like a lip balm and looks like a high-end gloss. Already repurchased twice!",
+            rating: 5,
+          },
+          {
+            name: "Rachel G.",
+            email: "rach.green@example.com",
+            title: "Instant confidence boost",
+            body: "One swipe and I look put together even on no-makeup days. The shine is insane and it makes my lips look fuller in every selfie. 100% obsessed.",
+            rating: 5,
+          },
+          {
+            name: "Rose D.",
+            email: "rose.lovesgloss@example.com",
+            title: "The only gloss in my bag now",
+            body: "It layers perfectly over my nude liners and doesn’t feel heavy. Plus, the pink packaging is so cute. All my friends keep borrowing it!",
+            rating: 5,
+          },
+        ];
+
+        return (
+          <section id="reviews" className="mt-12">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="font-display text-xl sm:text-2xl text-pink-950 mb-1">
+                  Loved by glossy babes everywhere
+                </h2>
+                <p className="text-sm text-pink-700">
+                  Real words from the cutest customer inbox ever.
+                </p>
+              </div>
+              <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-[11px] font-medium bg-pink-100 text-pink-700 border border-pink-200">
+                ★ 4.9 average rating
+              </span>
+            </div>
+
+            <div className="grid md:grid-cols-4 gap-4">
+              {reviews.map((review) => (
+                <div
+                  key={review.email}
+                  className="rounded-2xl bg-white/80 border border-pink-100 p-4 shadow-sm"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-xs font-semibold text-pink-900">
+                      {review.name}
+                    </p>
+                    <p className="text-[11px] text-pink-500">
+                      {review.email}
+                    </p>
+                  </div>
+                  <p className="text-[11px] text-pink-500 mb-1">
+                    {"★".repeat(review.rating)}{" "}
+                    <span className="text-pink-400">·</span> Verified purchase
+                  </p>
+                  <p className="text-xs font-medium text-pink-900 mb-1">
+                    {review.title}
+                  </p>
+                  <p className="text-xs text-pink-700">{review.body}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      }
+
+      function FAQs() {
+        const items = [
+          {
+            q: "Is GlassyGloss sticky?",
+            a: "Nope! The formula is a lightweight gel-oil hybrid. It gives a glassy shine without that hair-stuck-to-your-lips feeling.",
+          },
+          {
+            q: "Is it safe for sensitive lips?",
+            a: "Yes. It’s dermatologically tested, fragrance is kept gentle, and we skipped common irritants like parabens and mineral oil.",
+          },
+          {
+            q: "Will it dry out my lips?",
+            a: "Quite the opposite. It’s infused with hyaluronic acid, jojoba oil, shea butter, honey and vitamin E to keep lips cushioned and hydrated.",
+          },
+          {
+            q: "Is it vegan and cruelty free?",
+            a: "Absolutely. GlassyGloss is 100% vegan and never tested on animals.",
+          },
+          {
+            q: "How long does one tube last?",
+            a: "With daily use, most babes report one tube lasting 6–8 weeks. A little goes a long way thanks to the high-shine formula.",
+          },
+        ];
+
+        const [openIndex, setOpenIndex] = useState(0);
+
+        return (
+          <section id="faqs" className="mt-12">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="font-display text-xl sm:text-2xl text-pink-950 mb-1">
+                  FAQs
+                </h2>
+                <p className="text-sm text-pink-700">
+                  Everything you want to know before you gloss up.
+                </p>
+              </div>
+              <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-[11px] font-medium bg-pink-100 text-pink-700 border border-pink-200">
+                📩 Still curious? Contact us below.
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              {items.map((item, index) => {
+                const open = index === openIndex;
+                return (
+                  <div
+                    key={item.q}
+                    className="rounded-2xl border border-pink-100 bg-white/80 overflow-hidden shadow-sm"
+                  >
+                    <button
+                      className="w-full flex items-center justify-between text-left px-4 py-3 sm:px-5 sm:py-4"
+                      onClick={() => setOpenIndex(open ? -1 : index)}
+                    >
+                      <span className="text-sm font-medium text-pink-900">
+                        {item.q}
+                      </span>
+                      <span className="ml-4 text-pink-500 text-lg">
+                        {open ? "−" : "+"}
+                      </span>
+                    </button>
+                    {open && (
+                      <div className="px-4 pb-4 sm:px-5 text-xs text-pink-700 leading-relaxed">
+                        {item.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        );
+      }
+
+      function Contact() {
+        const [name, setName] = useState("");
+        const [email, setEmail] = useState("");
+        const [topic, setTopic] = useState("General question");
+        const [message, setMessage] = useState("");
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+
+          const payload = {
+            name,
+            email,
+            topic,
+            message,
+            submittedAt: new Date().toISOString(),
+          };
+
+          try {
+            const stored = localStorage.getItem("glassyGlossContacts");
+            const parsed = stored ? JSON.parse(stored) : [];
+            parsed.push(payload);
+            localStorage.setItem(
+              "glassyGlossContacts",
+              JSON.stringify(parsed)
+            );
+          } catch (err) {
+            console.error("Failed to store contact form data", err);
+          }
+
+          alert(
+            "Thank you, your response has been stored. You will get an email soon."
+          );
+
+          setName("");
+          setEmail("");
+          setTopic("General question");
+          setMessage("");
+        };
+
+        return (
+          <section id="contact" className="mt-12">
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="md:col-span-2">
+                <h2 className="font-display text-xl sm:text-2xl text-pink-950 mb-1">
+                  Let’s talk gloss ✉️
+                </h2>
+                <p className="text-sm text-pink-700 mb-4">
+                  Questions, collabs, wholesale, or just wanna gush about your
+                  favorite shade? Drop us a note.
+                </p>
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-3 bg-white/80 border border-pink-100 rounded-2xl p-4 shadow-sm"
+                >
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-medium text-pink-800 mb-1">
+                        Name <span className="text-brand">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full rounded-xl border border-pink-200 bg-pink-50/60 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand/70 focus:border-brand"
+                        placeholder="Gloss lover"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-medium text-pink-800 mb-1">
+                        Email <span className="text-brand">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        className="w-full rounded-xl border border-pink-200 bg-pink-50/60 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand/70 focus:border-brand"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-medium text-pink-800 mb-1">
+                      What can we help with? <span className="text-brand">*</span>
+                    </label>
+                    <select
+                      required
+                      className="w-full rounded-xl border border-pink-200 bg-pink-50/60 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand/70 focus:border-brand"
+                      value={topic}
+                      onChange={(e) => setTopic(e.target.value)}
+                    >
+                      <option>General question</option>
+                      <option>Order & shipping</option>
+                      <option>Influencer / collab</option>
+                      <option>Wholesale</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-medium text-pink-800 mb-1">
+                      Message <span className="text-brand">*</span>
+                    </label>
+                    <textarea
+                      rows="3"
+                      required
+                      className="w-full rounded-xl border border-pink-200 bg-pink-50/60 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand/70 focus:border-brand resize-none"
+                      placeholder="Spill the gloss…"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                    ></textarea>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-brand via-pink-500 to-fuchsia-500 shadow-md hover:scale-[1.01] active:scale-95 transition-transform"
+                  >
+                    Send message
+                  </button>
+                </form>
+              </div>
+
+              <div className="space-y-3">
+                <div className="rounded-2xl bg-gradient-to-br from-pink-100 via-pink-200 to-fuchsia-100 border border-pink-100 p-4">
+                  <h3 className="font-semibold text-sm text-pink-900 mb-1">
+                    Contact info
+                  </h3>
+                  <p className="text-xs text-pink-800 mb-2">
+                    <span className="font-medium">Email:</span>{" "}
+                    hello@glassygloss.co sassygirl@glassygloss.co
+                  </p>
+                  <p className="text-xs text-pink-800 mb-2">
+                    <span className="font-medium">DMs:</span> @glassygloss.co on
+                    Instagram & Pinterest
+                  </p>
+                  <p className="text-xs text-pink-800">
+                    <span className="font-medium">HQ:</span> 123 Cotton Candy
+                    Avenue, Suite 9, Vanilla Town Road, Pink City
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-white/80 border border-pink-100 p-4 text-xs text-pink-800">
+                  <h3 className="font-semibold text-sm text-pink-900 mb-1">
+                    Customer happiness hours
+                  </h3>
+                  <p>Tue–Sat · 9:00 AM – 6:00 PM (IST)</p>
+                  <p className="mt-1 text-pink-700">
+                    We reply within 24 hours, pinky promise!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      function Footer() {
+        return (
+          <footer className="mt-10 pt-6 pb-8 border-t border-pink-100 text-xs text-pink-600">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p>
+                © {new Date().getFullYear()} GlassyGloss Co. All rights
+                reserved.
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <a href="#hero" className="hover:text-pink-900">
+                  Back to top ↑
+                </a>
+                <span className="w-1 h-1 rounded-full bg-pink-300" />
+                <p className="text-pink-500">
+                  Built with ❤️ using React, Tailwind & AI.
+                </p>
+              </div>
+            </div>
+          </footer>
+        );
+      }
+
+      function App() {
+        const [active, setActive] = useState("hero");
+        const [cartCount, setCartCount] = useState(0);
+
+        // Scroll spy for active nav item
+        useEffect(() => {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  setActive(entry.target.id);
+                }
+              });
+            },
+            {
+              rootMargin: "-50% 0px -50% 0px",
+              threshold: 0.1,
+            }
+          );
+
+          navItems.forEach((item) => {
+            const el = document.getElementById(item.id);
+            if (el) observer.observe(el);
+          });
+
+          return () => observer.disconnect();
+        }, []);
+
+        // Load cart count from localStorage
+        useEffect(() => {
+          try {
+            const storedCart = localStorage.getItem("glassyGlossCartCount");
+            if (storedCart) {
+              const parsed = parseInt(storedCart, 10);
+              if (!Number.isNaN(parsed)) {
+                setCartCount(parsed);
+              }
+            }
+          } catch (err) {
+            console.error("Failed to read cart count", err);
+          }
+        }, []);
+
+        const handleNavClick = (id) => {
+          scrollToSection(id);
+        };
+
+        const handleAddToCart = () => {
+          setCartCount((prev) => {
+            const newCount = prev + 1;
+            try {
+              localStorage.setItem(
+                "glassyGlossCartCount",
+                newCount.toString()
+              );
+            } catch (err) {
+              console.error("Failed to store cart count", err);
+            }
+            return newCount;
+          });
+        };
+
+        return (
+          <>
+            <MobileNav
+              active={active}
+              onNavClick={handleNavClick}
+              cartCount={cartCount}
+            />
+            <div className="lg:flex">
+              <LeftNav
+                active={active}
+                onNavClick={handleNavClick}
+                cartCount={cartCount}
+              />
+              <main className="flex-1 lg:ml-64">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+                  <Hero onAddToCart={handleAddToCart} />
+                  <Integrations />
+                  <Features />
+                  <Bestseller onAddToCart={handleAddToCart} />
+                  <Gallery />
+                  <Reviews />
+                  <FAQs />
+                  <Contact />
+                  <Footer />
+                </div>
+              </main>
+            </div>
+          </>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
